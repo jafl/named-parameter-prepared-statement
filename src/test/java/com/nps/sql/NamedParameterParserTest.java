@@ -1,4 +1,4 @@
-package sql;
+package com.nps.sql;
 
 import java.util.List;
 import java.util.Map;
@@ -8,12 +8,13 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class NamedParameterParserTest {
-
+public class NamedParameterParserTest
+{
     Map<String, List<Integer>> indexMap = new HashMap<>();
 
     @Test
-    public void testParsing_oneParameter() {
+    public void testParsing_oneParameter()
+    {
         String parsedSql = NamedParameterParser.parse(
             "update foo set bar = :baz",
             indexMap);
@@ -25,7 +26,8 @@ public class NamedParameterParserTest {
     }
 
     @Test
-    public void testParsing_twoParameters() {
+    public void testParsing_twoParameters()
+    {
         String parsedSql = NamedParameterParser.parse(
             "update foo set bar = :baz, zap = :shug",
             indexMap);
@@ -39,7 +41,8 @@ public class NamedParameterParserTest {
     }
 
     @Test
-    public void testParsing_repeatedParameters() {
+    public void testParsing_repeatedParameters()
+    {
         String parsedSql = NamedParameterParser.parse(
             "update foo set bar = :baz, zap = :shug, foo = :baz",
             indexMap);
@@ -54,7 +57,8 @@ public class NamedParameterParserTest {
     }
 
     @Test
-    public void testParsing_quotes() {
+    public void testParsing_quotes()
+    {
         String parsedSql = NamedParameterParser.parse(
             "update `f'oo` set `bar` = :baz, zap = ':s\\'h\"ug', foo = \":b'a\\\"z\"",
             indexMap);

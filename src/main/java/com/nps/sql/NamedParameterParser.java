@@ -1,4 +1,4 @@
-package sql;
+package com.nps.sql;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -16,8 +16,8 @@ import java.sql.Timestamp;
 *
 * @see http://www.javaworld.com/article/2077706/core-java/named-parameters-for-preparedstatement.html
 */
-/* package */ class NamedParameterParser {
-
+/* package */ class NamedParameterParser
+{
     /**
     * Parses a query with named parameters to generate an indexed query and
     * the parameter-index mapping.
@@ -26,50 +26,58 @@ import java.sql.Timestamp;
     * @param indexMap output map of parameter names to parameter indices
     * @return the parsed query
     */
-    public static String parse(String sql, Map<String, List<Integer>> indexMap) {
-
+    public static String parse(
+        String                      sql,
+        Map<String, List<Integer>>  indexMap)
+    {
         indexMap.clear();
 
-        int length = sql.length();
+        int length             = sql.length();
         StringBuffer parsedSql = new StringBuffer(length);
 
-        int index = 1;      // probably the only situation where an index starts with 1
+        int index             = 1;      // probably the only situation where an index starts with 1 :)
         boolean inSingleQuote = false;
         boolean inDoubleQuote = false;
-        boolean inBackQuote = false;
+        boolean inBackQuote   = false;
 
-        for (int i=0; i<length; i++) {
-
+        for (int i=0; i<length; i++)
+        {
             char c = sql.charAt(i);
-            if (c == '\\') {
+            if (c == '\\')
+            {
                 parsedSql.append(c);
                 i++;
                 c = sql.charAt(i);
-
-            } else if (c == '\'' && !inDoubleQuote && !inBackQuote) {
+            }
+            else if (c == '\'' && !inDoubleQuote && !inBackQuote)
+            {
                 inSingleQuote = !inSingleQuote;
-
-            } else if (c == '"' && !inSingleQuote && !inBackQuote) {
+            }
+            else if (c == '"' && !inSingleQuote && !inBackQuote)
+            {
                 inDoubleQuote = !inDoubleQuote;
-
-            } else if (c == '`' && !inSingleQuote && !inDoubleQuote) {
+            }
+            else if (c == '`' && !inSingleQuote && !inDoubleQuote)
+            {
                 inBackQuote = !inBackQuote;
-
-            } else if (!inSingleQuote && !inDoubleQuote && !inBackQuote &&
-                    c == ':' && i+1 < length &&
-                    Character.isJavaIdentifierStart(sql.charAt(i+1))) {
-
+            }
+            else if (!inSingleQuote && !inDoubleQuote && !inBackQuote &&
+                     c == ':' && i+1 < length &&
+                     Character.isJavaIdentifierStart(sql.charAt(i+1)))
+            {
                 int j = i + 2;
-                while (j < length && Character.isJavaIdentifierPart(sql.charAt(j))) {
+                while (j < length && Character.isJavaIdentifierPart(sql.charAt(j)))
+                {
                     j++;
                 }
                 String name = sql.substring(i+1, j);
 
-                c = '?';                // replace the parameter with a question mark
+                c  = '?';                // replace the parameter with a question mark
                 i += name.length();     // skip past the end of the parameter
 
                 List<Integer> indexList = indexMap.get(name);
-                if (indexList == null) {
+                if (indexList == null)
+                {
                     indexList = new ArrayList<Integer>();
                     indexMap.put(name, indexList);
                 }

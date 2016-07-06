@@ -1,4 +1,4 @@
-package sql;
+package com.nps.sql;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -10,8 +10,8 @@ import java.lang.reflect.Method;
 
 import java.sql.PreparedStatement;
 
-/* package */ class NPPSInvocationHandler implements InvocationHandler {
-
+/* package */ class NPPSInvocationHandler implements InvocationHandler
+{
     /**
      * Standard PreparedStatement used to implement the PreparedStatement
      * interface.
@@ -26,37 +26,50 @@ import java.sql.PreparedStatement;
     private Map<String, List<Integer>> indexMap;
 
     /**
-     *
+     * @param statement PreparedStatement
+     * @param indexMap map of parameter names to indices
      */
-    public NPPSInvocationHandler(PreparedStatement statement, Map<String, List<Integer>> indexMap) {
+    public NPPSInvocationHandler(PreparedStatement statement, Map<String, List<Integer>> indexMap)
+    {
         this.statement = statement;
         this.indexMap = indexMap;
     }
 
     /**
-     *
+     * @param proxy the proxy object
+     * @param method method being invoked
+     * @param args arguments passed to the method
      */
     @Override
-    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-
+    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable
+    {
         boolean isSetter =
+                args != null &&
                 args.length > 1 &&
                 "set".equals(method.getName().substring(0,3));
 
-        if (isSetter && args[0] instanceof String) {
+        if (isSetter && args[0] instanceof String)
+        {
+            Class[] paramTypes = method.getParameterTypes();
+            paramTypes[0]      = int.class;
+            Method statementMethod = statement.getClass().getMethod(
+                method.getName(), paramTypes);
 
             Object result = null;
-            for (Integer i : getIndices((String) args[0])) {
+            for (Integer i : getIndices((String) args[0]))
+            {
                 args[0] = i;
-                result = method.invoke(statement, args);
+                result  = statementMethod.invoke(statement, args);
             }
 
             return result;
-
-        } else if (isSetter && args[0] instanceof Integer) {
+        }
+        else if (isSetter && args[0] instanceof Integer)
+        {
             throw new RuntimeException("Cannot set value by index on a NamedParameterPreparedStatement");
-
-        } else {
+        }
+        else
+        {
             return method.invoke(statement, args);
         }
     }
@@ -68,10 +81,11 @@ import java.sql.PreparedStatement;
      * @return parameter indices
      * @throws IllegalArgumentException if the parameter does not exist
      */
-    private List<Integer> getIndices(String name) {
-
+    private List<Integer> getIndices(String name)
+    {
         List<Integer> indices = indexMap.get(name);
-        if (indices == null) {
+        if (indices == null)
+        {
             throw new IllegalArgumentException("Parameter not found: " + name);
         }
         return indices;
