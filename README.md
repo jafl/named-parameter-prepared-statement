@@ -7,6 +7,7 @@ Requires JDK 8 or later.
 
 [![Build Status](https://secure.travis-ci.org/jafl/named-parameter-prepared-statement.png?branch=master)](http://travis-ci.org/jafl/named-parameter-prepared-statement)
 [![Code coverage](https://img.shields.io/codecov/c/github/jafl/named-parameter-prepared-statement/master.svg?style=flat)](https://codecov.io/gh/jafl/named-parameter-prepared-statement)
+[![Vulnerabilities](https://img.shields.io/snyk/vulnerabilities/github/jafl/named-parameter-prepared-statement.svg?style=flat)](https://app.snyk.io/org/jafl/projects/)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/jafl/named-parameter-prepared-statement.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/jafl/named-parameter-prepared-statement/alerts/)
 [![Language grade: Java](https://img.shields.io/lgtm/grade/java/g/jafl/named-parameter-prepared-statement.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/jafl/named-parameter-prepared-statement/context:java)
 
